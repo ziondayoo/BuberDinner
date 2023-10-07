@@ -1,7 +1,5 @@
 using BuberDinner.Application.Services;
-//using BuberDinner.Infrastructure;
-using BuberDinner.Application.Services.Authentication;
-using Microsoft.Extensions.DependencyInjection;
+using BuberDinner.Infrastructure;
 
 namespace BuberDinner;
 
@@ -19,7 +17,8 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddApplication();
-       // builder.Services.AddInfrastructure();
+        builder.Services.AddInfrastructure(builder.Configuration);
+        
 
 
         var app = builder.Build();
