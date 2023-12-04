@@ -1,3 +1,4 @@
+using BuberDinner.Api.MiddleWare;
 using BuberDinner.Application.Services;
 using BuberDinner.Infrastructure;
 
@@ -31,6 +32,8 @@ public class Program
         }
 
         {
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
         app.UseHttpsRedirection();
 
         app.UseAuthorization();

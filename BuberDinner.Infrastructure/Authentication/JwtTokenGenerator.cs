@@ -1,5 +1,6 @@
 ﻿using BuberDinner.Application.Common.Interfaces.Authentication;
 using BuberDinner.Application.DateServices;
+using BuberDinner.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +21,7 @@ namespace BuberDinner.Infrastructure.Authentication
             _jwtSettings = jwtOptions.Value;
         }
 
-        public string GenerateToken(Guid userId, string firstName, string lastName)
+        public string GenerateToken(User user)
         {
             //var key = new byte[32]; // 256 bits
             //using (var rng = RandomNumberGenerator.Create())
@@ -31,14 +32,13 @@ namespace BuberDinner.Infrastructure.Authentication
             //var securityKey = new SymmetricSecurityKey(key);
             //var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-
-            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
-                                         SecurityAlgorithms.HmacSha256);
+             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_jwtSettings.Secret)),SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.GivenName, firstName ),
-                new Claim(JwtRegisteredClaimNames.FamilyName, lastName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -49,7 +49,7 @@ namespace BuberDinner.Infrastructure.Authentication
                 claims: claims,
                 signingCredentials: signingCredentials
                 );
-            return new JwtSecurityTokenHandler().WriteToken( securityToken );
+            return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
     }
 }

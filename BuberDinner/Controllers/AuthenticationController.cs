@@ -23,15 +23,15 @@ namespace BuberDinner.Api.Controllers
         {
             var  authResult = _authenticationServices.Register(request.FirstName,request.LastName, request.Email, request.Password);
 
-            var response = new AuthenticationResponse(authResult.Id, authResult.FirstName, authResult.LastName, authResult.Email, authResult.Token);
+            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email, authResult.Token);
             return Ok(response);
         }
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
             var authResult = _authenticationServices.Login(request.Email, request.Password);
-            var response = new AuthenticationResponse(authResult.Id, authResult.FirstName, authResult.LastName, authResult.Email, authResult.Token);
-             return Ok(response);
+            var response = new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName, authResult.User.LastName, authResult.User.Email, authResult.Token);
+            return Ok(response); 
 
         }
     }
